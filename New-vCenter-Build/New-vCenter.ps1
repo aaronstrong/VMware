@@ -23,13 +23,13 @@ Function Add_License_to_vCenter {
     }
 
 # ------vSphere Targeting Variables tracked below------#
-$vCenterInstance = "192.168.2.200"            # vCenter address
+$vCenterInstance = "VCENTER-ADDRESS"            # vCenter address
 $vCenterUser = "administrator@vsphere.local"   # vCenter Username
 $vCenterPass = "VMware1!" # vCenter Password
-$esxHosts = "192.168.2.205" # ESXi Hosts separate with comma if multiples
-$dataCenter = "HomeLab"  #Name of the new Datacneter
-$clusterName = "Cluster"  #Name of the new Cluster
-$vcenterName = "VMware vCenter Server Appliance"
+$esxHosts = "ESXHOST-ADDRESS" # ESXi Hosts separate with comma if multiples
+$dataCenter = "DATACENTER-ADDRESS"  #Name of the new Datacneter
+$clusterName = "CLUSTER-NAME"  #Name of the new Cluster
+$vcenterName = "VCENTER NAME IN VSPHERE"
 $license = "licenseKeyHere"
 
 # This section logs on to the defined vCenter instance above
