@@ -1,8 +1,23 @@
-﻿Param(
+﻿<#
+    .SYNOPSIS
+        To wait until the virtula machine is back up and running. Best if VM
+        is running VMtools
+
+    .NOTES Author:  Aaron Strong
+    .NOTES Site:    www.theaaronstrong.com
+    .NOTES Twitter  @theaaronstrong.com
+
+    .PARAMETER hostname
+        Name of the virtual machine to monitor the VMtools status and VM Guest Operation
+
+    .PARAMETER timeToWait
+        How many seconds to wait between
+#>
+
+Param(
     [Parameter(Mandatory=$true)][string]$hostname,
     [int]$timeToWait = 5
 )
-
 
 # +------------------------------------------------------+
 # |        Load VMware modules if not loaded             |
