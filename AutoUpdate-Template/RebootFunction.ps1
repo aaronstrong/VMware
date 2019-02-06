@@ -1,7 +1,6 @@
 ﻿<#
     .SYNOPSIS
-        To wait until the virtula machine is back up and running. Best if VM
-        is running VMtools
+        To wait until the virtual machine is back up and running. Best if VM is running VMtools
 
     .NOTES Author:  Aaron Strong
     .NOTES Site:    www.theaaronstrong.com
@@ -38,7 +37,7 @@ if ( !(Get-Module -Name VMware.VimAutomation.Core -ErrorAction SilentlyContinue)
 }
 
 
-
+    # --- Check on the VMtools Status ---#
     write-host “Waiting for VM Tools to stop” -ForegroundColor Yellow
     do {
     $toolsStatus = (Get-VM $hostname | Get-View).Guest.ToolsStatus
