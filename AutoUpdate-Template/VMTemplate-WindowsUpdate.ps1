@@ -1,6 +1,6 @@
 ﻿<#
     .SYNOPSIS
-        Run Windows updates on a converted templated and converts back to a template.
+        Run Windows updates on a VM that is a converted template and converts VM back to a template.
     .Description
         Send the function the name of the template to convert from a template to a virtual machine. Pass key vSphere
         information like the vCenter and credentials. This function will require the local administrator account name
