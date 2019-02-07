@@ -87,19 +87,22 @@ cls
 Write-Host "$template is up and will wait 2 hours for updates to be installed." -ForegroundColor Green
 
 #long timer here
-#Start-sleep -Seconds 3600
-
 $longtimer..0 | foreach { echo $_ | Out-File $WSLog -Append; start-sleep -seconds 1; cls; }
+
+# Reconnect to vCenter
+find-module -name vmware.powercli
+$password = $vCenterPasss | ConvertTo-SecureString -AsPlainText -Force
+$credential = New-Object -TypeName pscredential -ArgumentList $vCenterUser,$password
+Connect-VIServer -Server $vCenterInstance -Credential $credential
   
 Write-Output "Performing final reboot of $template"    
 Restart-VMGuest -VM $template -Confirm:$false
-
 .\RebootFunction.ps1 -hostname $template
 
 # Record when Windows Update Ran in the Notes field
 Write-host "Recording in Notes field the date this template was updated." -ForegroundColor Green
 $today = (get-date).tostring('M/d/y')
-set-vm -vm "Windows 2016" -Notes "Windows Update last ran on $today." -Confirm:$false | Out-File $WSLog -Append
+set-vm -vm $template -Notes "Windows Update last ran on $today." -Confirm:$false | Out-File $WSLog -Append
 
 #Shutdown the server, reset vCPU count and convert it back to Template.
 write-host "Shutdown the  server and take back vCPU." -foregroundcolor green
@@ -111,6 +114,8 @@ Start-Sleep -Seconds 15
 Write-Host "vCPU count reset. Now converting to template" -ForegroundColor Green
 Set-VM –VM $template -ToTemplate -Confirm:$false
 write-host "Job Completed!" -ForegroundColor Green
+
+Disconnect-VIServer -Server $vCenterInstance -Confirm:$false
 
 $EndDTM = (Get-date)
 Write-Verbose "Elapse time: $(($EndDTM-$StartDTM).TotalSeconds) Seconds" -Verbose

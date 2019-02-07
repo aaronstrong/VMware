@@ -13,4 +13,4 @@
 
 cd $PSScriptRoot  # Change directory from which script is running
 
-.\VMTemplate-WindowsUpdate.ps1 -template "Windows 2019"
+.\VMTemplate-WindowsUpdate.ps1 -template "Windows 2019" -longtimer 120
