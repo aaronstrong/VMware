@@ -23,14 +23,14 @@ Function Add_License_to_vCenter {
     }
 
 # ------vSphere Targeting Variables tracked below------#
-$vCenterInstance = "VCENTER-ADDRESS"            # vCenter address
+$vCenterInstance = "192.168.2.200"            # vCenter address
 $vCenterUser = "administrator@vsphere.local"   # vCenter Username
 $vCenterPass = "VMware1!" # vCenter Password
-$esxHosts = "ESXHOST-ADDRESS" # ESXi Hosts separate with comma if multiples
-$dataCenter = "DATACENTER-ADDRESS"  #Name of the new Datacneter
-$clusterName = "CLUSTER-NAME"  #Name of the new Cluster
-$vcenterName = "VCENTER NAME IN VSPHERE"
-$license = "licenseKeyHere"
+$esxHosts = @("192.168.2.205","192.168.2.206") # ESXi Hosts separate with comma if multiples
+$dataCenter = "MyDatacenter"  #Name of the new Datacneter
+$clusterName = "HomeCluster"  #Name of the new Cluster
+$vcenterName = "VMware vCenter Server Appliance"
+$license = "3N48N-JYH0N-D8V81-0T182-2NU36"
 
 # This section logs on to the defined vCenter instance above
 find-module -name vmware.powercli
@@ -46,12 +46,14 @@ New-Cluster -Location $dataCenter -Name $clusterName
 # Add ESXi hosts to new Cluster
 foreach ($esx in $esxHosts){
     Write-Host "Adding ESXi Host $esx to cluster $clusterName" -ForegroundColor Green
-    Add-VMHost -Name $esx -Location (get-cluster $clusterName) -Credential $esxcred -RunAsync -Confirm:$false -force
+    Add-VMHost -Name $esx -Location (get-cluster $clusterName) -Credential $esxcred -RunAsync -Confirm:$false -force -WarningAction Ignore
 }
 
 # Set the Startup Policy for vCenter
 $vmstartpolicy = Get-VMStartPolicy -VM $vcenterName
-if($vmstartpolicy -ne "PowerOn"){
+if($vmstartpolicy.StartAction -ne "PowerOn"){
+    $vmhost = Get-VM -name "$vcenterName"
+    Get-VMHostStartPolicy -VMHost ($vmhost.VMHost) | Set-VMHostStartPolicy -Enabled $true
     Set-VMStartPolicy -StartPolicy $vmstartpolicy -StartAction PowerOn -StartOrder 1
 }
 
